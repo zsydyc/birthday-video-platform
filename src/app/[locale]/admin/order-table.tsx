@@ -190,31 +190,41 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
 
                       {/* Asset previews */}
                       {(() => {
-                        const photoUrl = typeof order.formData.photoUrl === "string" ? order.formData.photoUrl : null;
-                        const voiceUrl = typeof order.formData.voiceUrl === "string" ? order.formData.voiceUrl : null;
-                        if (!photoUrl && !voiceUrl) return null;
+                        const photoUrls = Array.isArray(order.formData.photoUrls)
+                          ? (order.formData.photoUrls as string[])
+                          : typeof order.formData.photoUrl === "string"
+                          ? [order.formData.photoUrl]
+                          : [];
+                        const voiceUrls = Array.isArray(order.formData.voiceUrls)
+                          ? (order.formData.voiceUrls as string[])
+                          : typeof order.formData.voiceUrl === "string"
+                          ? [order.formData.voiceUrl]
+                          : [];
+                        if (!photoUrls.length && !voiceUrls.length) return null;
                         return (
-                          <div className="mb-3 flex flex-wrap gap-3">
-                            {photoUrl && (
+                          <div className="mb-3 flex flex-wrap gap-2">
+                            {photoUrls.map((url, i) => (
                               <a
-                                href={photoUrl}
+                                key={url}
+                                href={url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-1.5 rounded-lg border border-[#FF6B8A]/30 bg-white px-3 py-1.5 text-xs font-medium text-[#FF6B8A] hover:bg-[#FF6B8A]/5"
                               >
-                                🖼 {t("viewPhoto")}
+                                🖼 {t("viewPhoto")}{photoUrls.length > 1 ? ` ${i + 1}` : ""}
                               </a>
-                            )}
-                            {voiceUrl && (
+                            ))}
+                            {voiceUrls.map((url, i) => (
                               <a
-                                href={voiceUrl}
+                                key={url}
+                                href={url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-1.5 rounded-lg border border-[#60C8FF]/30 bg-white px-3 py-1.5 text-xs font-medium text-[#0077aa] hover:bg-[#60C8FF]/5"
                               >
-                                🎵 {t("listenAudio")}
+                                🎵 {t("listenAudio")}{voiceUrls.length > 1 ? ` ${i + 1}` : ""}
                               </a>
-                            )}
+                            ))}
                           </div>
                         );
                       })()}
@@ -223,8 +233,9 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
                       <div className="grid grid-cols-2 gap-x-8 gap-y-1 sm:grid-cols-3">
                         {Object.entries(order.formData)
                           .filter(([k, v]) =>
-                            k !== "photoUrl" && k !== "voiceUrl" &&
-                            v !== "" && v !== null && v !== undefined && v !== false
+                            !["photoUrl", "voiceUrl", "photoUrls", "voiceUrls"].includes(k) &&
+                            v !== "" && v !== null && v !== undefined && v !== false &&
+                            !(Array.isArray(v) && v.length === 0)
                           )
                           .map(([k, v]) => (
                             <div key={k} className="flex gap-2 text-xs">

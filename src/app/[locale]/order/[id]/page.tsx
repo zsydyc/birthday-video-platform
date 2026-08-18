@@ -26,8 +26,8 @@ interface FormState {
   occasion: string;
   blessingMessage: string;
   specialNotes: string;
-  photoFile: File | null;
-  voiceFile: File | null;
+  photoFiles: File[];
+  voiceFiles: File[];
   // toddler extras
   favouriteColour: string;
   favouriteAnimal: string;
@@ -52,7 +52,7 @@ interface FormState {
 // Production defaults (swap back in before launch — replace the block below)
 // const INITIAL: FormState = {
 //   subjectName: "", age: "", birthday: "", occasion: "birthday",
-//   blessingMessage: "", specialNotes: "", photoFile: null, voiceFile: null,
+//   blessingMessage: "", specialNotes: "", photoFiles: [], voiceFiles: [],
 //   favouriteColour: "", favouriteAnimal: "", bedtimeStory: false, storyTheme: "",
 //   styleTag: "", performanceStyle: "", language: "", ageRatingAck: false,
 //   petType: "", petName: "", personality: "", petOccasion: "birthday",
@@ -67,8 +67,8 @@ const INITIAL: FormState = {
   occasion: "birthday",
   blessingMessage: "Happy Birthday Sophie! Wishing you a magical day full of joy and laughter. You are so loved! 🎂",
   specialNotes: "She loves the colour pink and her favourite animal is a unicorn.",
-  photoFile: null,
-  voiceFile: null,
+  photoFiles: [],
+  voiceFiles: [],
   favouriteColour: "Pink",
   favouriteAnimal: "Unicorn",
   bedtimeStory: true,
@@ -153,14 +153,18 @@ export default function OrderFormPage({
     setError(null);
 
     // Persist non-file fields before the OAuth redirect in case of 401
-    const serializableForm = { ...form, photoFile: null, voiceFile: null };
+    const serializableForm = { ...form, photoFiles: [], voiceFiles: [] };
     localStorage.setItem(DRAFT_KEY, JSON.stringify(serializableForm));
 
     try {
-      // Upload files first, then attach URLs to the order
-      const [photoUrl, voiceUrl] = await Promise.all([
-        form.photoFile ? uploadFile(form.photoFile) : Promise.resolve(null),
-        form.voiceFile ? uploadFile(form.voiceFile) : Promise.resolve(null),
+      // Upload all files in parallel, then attach URL arrays to the order
+      const [photoUrls, voiceUrls] = await Promise.all([
+        Promise.all(form.photoFiles.map(uploadFile)).then((urls) =>
+          urls.filter(Boolean) as string[]
+        ),
+        Promise.all(form.voiceFiles.map(uploadFile)).then((urls) =>
+          urls.filter(Boolean) as string[]
+        ),
       ]);
 
       const res = await fetch("/api/orders", {
@@ -187,9 +191,9 @@ export default function OrderFormPage({
             petName: form.petName,
             personality: form.personality,
             petOccasion: form.petOccasion,
-            // uploaded asset URLs (null if not provided)
-            photoUrl,
-            voiceUrl,
+            // uploaded asset URL arrays (empty if nothing provided)
+            photoUrls,
+            voiceUrls,
           },
           coppaConsent: form.coppaConsent,
           portraitConsent: form.portraitConsent,
@@ -224,7 +228,7 @@ export default function OrderFormPage({
   }
 
   const showCoppa = needsCoppa(template.category, form.age);
-  const showPortrait = !!form.photoFile;
+  const showPortrait = form.photoFiles.length > 0;
   const canSubmit =
     form.subjectName.trim() &&
     form.blessingMessage.trim() &&
@@ -369,11 +373,21 @@ export default function OrderFormPage({
               <input
                 type="file"
                 accept="image/*"
+                multiple
                 className="w-full text-sm text-[#2D2235]/70 file:mr-3 file:rounded-full file:border-0 file:bg-[#FF6B8A]/10 file:px-4 file:py-1.5 file:text-sm file:text-[#FF6B8A] file:font-medium hover:file:bg-[#FF6B8A]/20"
                 onChange={(e) =>
-                  set("photoFile", e.target.files?.[0] ?? null)
+                  set("photoFiles", Array.from(e.target.files ?? []))
                 }
               />
+              {form.photoFiles.length > 0 && (
+                <ul className="mt-1.5 space-y-0.5">
+                  {form.photoFiles.map((f, i) => (
+                    <li key={i} className="flex items-center gap-1.5 text-xs text-[#2D2235]/60">
+                      <span className="text-[#FF6B8A]">🖼</span> {f.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             <div>
@@ -382,11 +396,21 @@ export default function OrderFormPage({
               <input
                 type="file"
                 accept="audio/*"
+                multiple
                 className="w-full text-sm text-[#2D2235]/70 file:mr-3 file:rounded-full file:border-0 file:bg-[#60C8FF]/10 file:px-4 file:py-1.5 file:text-sm file:text-[#60C8FF] file:font-medium hover:file:bg-[#60C8FF]/20"
                 onChange={(e) =>
-                  set("voiceFile", e.target.files?.[0] ?? null)
+                  set("voiceFiles", Array.from(e.target.files ?? []))
                 }
               />
+              {form.voiceFiles.length > 0 && (
+                <ul className="mt-1.5 space-y-0.5">
+                  {form.voiceFiles.map((f, i) => (
+                    <li key={i} className="flex items-center gap-1.5 text-xs text-[#2D2235]/60">
+                      <span className="text-[#60C8FF]">🎵</span> {f.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </section>
 
