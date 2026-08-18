@@ -1,26 +1,67 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Ocean Birthday palette */
+  --color-coral:       #FF6B8A;
+  --color-coral-light: #FFB3C4;
+  --color-coral-dark:  #E84D6F;
+
+  --color-yellow:       #FFCF56;
+  --color-yellow-light: #FFE9A0;
+  --color-yellow-dark:  #E6AE20;
+
+  --color-mint:       #6ECFAF;
+  --color-mint-light: #B5EAD7;
+  --color-mint-dark:  #4BAF90;
+
+  --color-sky:       #60C8FF;
+  --color-sky-light: #B8E6FF;
+  --color-sky-dark:  #2EB0F0;
+
+  --color-cream:      #FFF8F2;
+  --color-cream-dark: #F5EEE6;
+
+  --color-charcoal:       #2D2235;
+  --color-charcoal-light: #5A4E6A;
+  --color-charcoal-muted: #8B7DA0;
+
+  /* Semantic aliases */
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-charcoal);
+  --color-primary:    var(--color-coral);
+  --color-secondary:  var(--color-yellow);
+  --color-accent:     var(--color-sky);
+  --color-success:    var(--color-mint);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Rounded corners — playful feel */
+  --radius-bubble: 1.5rem;
+  --radius-card:   1rem;
+  --radius-btn:    9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality on mobile */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-coral-light); border-radius: 9999px; }

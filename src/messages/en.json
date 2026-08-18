@@ -1,0 +1,199 @@
+{
+  "nav": {
+    "home": "Home",
+    "howItWorks": "How It Works",
+    "pricing": "Pricing",
+    "signIn": "Sign In",
+    "myOrders": "My Orders"
+  },
+  "hero": {
+    "badge": "Personalized Birthday Videos",
+    "headline": "Make Their Birthday",
+    "headlineAccent": "Unforgettable",
+    "subheadline": "A custom video in minutes — just fill in a short form and we'll create a magical, personalized birthday video for your little one.",
+    "cta": "Create a Video",
+    "ctaFree": "Try for Free",
+    "trustedBy": "Loved by families in North America and beyond"
+  },
+  "categories": {
+    "title": "Choose Your Style",
+    "subtitle": "Every child — and every pet — deserves their own magic.",
+    "toddler": {
+      "label": "Toddlers",
+      "age": "Ages 0–4",
+      "description": "Gentle, colourful animations with simple stories and lullabies."
+    },
+    "kids": {
+      "label": "Kids",
+      "age": "Ages 4–12",
+      "description": "Adventure, heroes, and laughs — in a totally original style."
+    },
+    "adultFun": {
+      "label": "Adult Fun",
+      "age": "For Grown-ups",
+      "description": "Funny, heartfelt, or roast-worthy — you choose the vibe."
+    },
+    "pet": {
+      "label": "Pets",
+      "age": "Fur Babies",
+      "description": "Because your pet deserves a birthday shout-out too."
+    }
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "Three easy steps. One magical video.",
+    "step1": {
+      "title": "Fill the Form",
+      "description": "Tell us about the birthday star — name, age, favourite things, and a photo."
+    },
+    "step2": {
+      "title": "We Create",
+      "description": "Our team crafts a personalised video just for them, usually within 24 hours."
+    },
+    "step3": {
+      "title": "Share & Celebrate",
+      "description": "Download or share your video directly — and watch their face light up."
+    }
+  },
+  "cta": {
+    "title": "Ready to Make Magic?",
+    "subtitle": "Friends and parenting-group members get a free trial — no credit card needed.",
+    "button": "Start for Free"
+  },
+  "footer": {
+    "tagline": "Making memories, one video at a time.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "contact": "Contact"
+  },
+  "order": {
+    "freeTrial": "Free Trial",
+    "subject": "Who's the Birthday Star?",
+    "name": "Name",
+    "namePlaceholder": "e.g. Sophie",
+    "age": "Age",
+    "agePlaceholder": "e.g. 5",
+    "birthday": "Birthday (optional)",
+    "occasion": "Occasion",
+    "message": "Birthday Message",
+    "messagePlaceholder": "Write a personal message or pick one of our templates…",
+    "notes": "Anything else?",
+    "notesPlaceholder": "Special requests, inside jokes, favourite colours…",
+    "uploadPhoto": "Upload a Photo",
+    "uploadVoice": "Upload a Voice Clip",
+    "consent": {
+      "coppa": "I confirm I am the parent or legal guardian of the child and consent to providing their information for video creation.",
+      "portrait": "I confirm I have the right to use all uploaded photos and audio for this video."
+    },
+    "submit": "Submit Order",
+    "submitFree": "Claim Free Trial"
+  },
+  "orderFlow": {
+    "pageTitle": "Create a Video",
+    "freeBadge": "Free Trial",
+    "selectCategory": {
+      "title": "Who is this video for?",
+      "subtitle": "Choose a category to get started."
+    },
+    "selectTemplate": {
+      "title": "Choose a Style",
+      "subtitle": "Pick the look and feel that fits best.",
+      "back": "Back",
+      "duration": {
+        "short": "~1 min",
+        "medium": "~2 min"
+      },
+      "occasions": "Occasions",
+      "select": "Choose This Style"
+    },
+    "form": {
+      "back": "Back",
+      "sectionSubject": "About the Birthday Star",
+      "subjectName": "Name / Nickname",
+      "subjectNamePlaceholder": "e.g. Sophie",
+      "age": "Age",
+      "agePlaceholder": "e.g. 5",
+      "birthday": "Birthday (optional)",
+      "occasion": "Occasion",
+      "occasionBirthday": "Birthday",
+      "occasionAdoption": "Adoption Anniversary",
+      "occasionGraduation": "Graduation",
+      "occasionOther": "Other",
+      "blessingMessage": "Blessing Message",
+      "blessingMessagePlaceholder": "Write a personal birthday message for the video...",
+      "specialNotes": "Anything else?",
+      "specialNotesPlaceholder": "Special requests, favourite colours, inside jokes...",
+      "sectionMedia": "Photos & Audio",
+      "uploadPhoto": "Upload a Photo",
+      "uploadPhotoHint": "Recommended — helps personalise the video",
+      "uploadVoice": "Upload a Voice Clip (optional)",
+      "uploadVoiceHint": "A favourite song or personal greeting",
+      "sectionExtra": "A Few More Details",
+      "toddler": {
+        "favouriteColour": "Favourite Colour",
+        "favouriteColourPlaceholder": "e.g. Blue",
+        "favouriteAnimal": "Favourite Animal",
+        "favouriteAnimalPlaceholder": "e.g. Elephant",
+        "bedtimeStory": "Include a bedtime story segment?",
+        "storyTheme": "Story Theme",
+        "storyThemePlaceholder": "e.g. Ocean adventure, forest friends..."
+      },
+      "kids": {
+        "styleTag": "Video Style",
+        "heroStyle": "Hero Style",
+        "adventureStyle": "Adventure Style",
+        "funnyStyle": "Funny Style"
+      },
+      "adultFun": {
+        "performanceStyle": "Performance Style",
+        "performanceStylePlaceholder": "e.g. Heartfelt, Roast, Playful",
+        "language": "Language",
+        "ageRatingAck": "I confirm this video is intended for adult audiences."
+      },
+      "pet": {
+        "petType": "Type of Pet",
+        "petTypePlaceholder": "e.g. Dog, Cat, Rabbit",
+        "petName": "Pet's Name",
+        "petNamePlaceholder": "e.g. Buddy",
+        "personality": "Personality",
+        "personalityPlaceholder": "e.g. Loves fetch, super cuddly, always hungry...",
+        "occasion": "Occasion",
+        "occasionBirthday": "Birthday",
+        "occasionAdoption": "Adoption Anniversary"
+      },
+      "sectionConsent": "Consent",
+      "coppaConsent": "I confirm I am the parent or legal guardian of this child and consent to providing their information for video creation.",
+      "portraitConsent": "I confirm I have the right to use all uploaded photos and audio for this video.",
+      "submit": "Claim Free Trial",
+      "submitting": "Submitting..."
+    },
+    "confirmation": {
+      "title": "Your order is in!",
+      "subtitle": "We're on it — your personalised video is being created.",
+      "orderLabel": "Order",
+      "nextStepsTitle": "What happens next?",
+      "nextStep1": "Our team reviews your details",
+      "nextStep2": "We craft your personalised video",
+      "nextStep3": "You'll get a preview link to approve",
+      "backHome": "Back to Home",
+      "trackOrder": "Track Order"
+    },
+    "statusPage": {
+      "title": "Order Status",
+      "orderLabel": "Order",
+      "statusLabel": "Status",
+      "updatedLabel": "Last updated"
+    }
+  },
+  "status": {
+    "pending_payment_or_trial": "Pending",
+    "queued": "Queued",
+    "generating": "Creating your video…",
+    "pending_review": "Under Review",
+    "pending_user_confirmation": "Ready for Preview",
+    "delivered": "Delivered",
+    "completed": "Completed",
+    "in_dispute": "In Dispute",
+    "cancelled": "Cancelled"
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "nav": {
+    "home": "首页",
+    "howItWorks": "如何使用",
+    "pricing": "价格",
+    "signIn": "登录",
+    "myOrders": "我的订单"
+  },
+  "hero": {
+    "badge": "专属生日视频",
+    "headline": "让ta的生日",
+    "headlineAccent": "永生难忘",
+    "subheadline": "几分钟内生成专属定制视频——填写简单问卷，我们为你的宝贝打造一段充满温情的生日惊喜。",
+    "cta": "立即制作",
+    "ctaFree": "免费试用",
+    "trustedBy": "北美及全球华人家庭的心头好"
+  },
+  "categories": {
+    "title": "选择你的风格",
+    "subtitle": "每个孩子——和每只宠物——都值得拥有专属的魔法时刻。",
+    "toddler": {
+      "label": "幼儿向",
+      "age": "0–4岁",
+      "description": "温柔可爱的卡通动画，简单的故事和摇篮曲。"
+    },
+    "kids": {
+      "label": "儿童向",
+      "age": "4–12岁",
+      "description": "冒险、英雄、搞笑——全原创风格，充满活力。"
+    },
+    "adultFun": {
+      "label": "成人趣味",
+      "age": "成人专属",
+      "description": "温馨感人或爆笑整蛊，你来定风格。"
+    },
+    "pet": {
+      "label": "宠物向",
+      "age": "毛孩子",
+      "description": "你家的毛孩子也值得拥有专属的生日祝福。"
+    }
+  },
+  "howItWorks": {
+    "title": "使用流程",
+    "subtitle": "三步完成，一段魔法视频。",
+    "step1": {
+      "title": "填写问卷",
+      "description": "告诉我们生日主角的信息——名字、年龄、爱好，上传一张照片。"
+    },
+    "step2": {
+      "title": "我们制作",
+      "description": "我们的团队为ta量身打造专属视频，通常24小时内完成。"
+    },
+    "step3": {
+      "title": "分享庆生",
+      "description": "直接下载或分享视频——见证ta脸上最灿烂的笑容。"
+    }
+  },
+  "cta": {
+    "title": "准备好制造魔法了吗？",
+    "subtitle": "亲友及母婴群用户可免费试用——无需信用卡。",
+    "button": "免费开始"
+  },
+  "footer": {
+    "tagline": "用心记录每个重要时刻。",
+    "privacy": "隐私政策",
+    "terms": "服务条款",
+    "contact": "联系我们"
+  },
+  "order": {
+    "freeTrial": "免费试用",
+    "subject": "生日主角是谁？",
+    "name": "姓名/昵称",
+    "namePlaceholder": "例：小苏菲",
+    "age": "年龄",
+    "agePlaceholder": "例：5",
+    "birthday": "生日（选填）",
+    "occasion": "庆祝场合",
+    "message": "生日祝福语",
+    "messagePlaceholder": "写下你的祝福，或从我们的模板中选择一条再修改……",
+    "notes": "还有什么要告诉我们的？",
+    "notesPlaceholder": "特殊要求、内部梗、喜欢的颜色……",
+    "uploadPhoto": "上传照片",
+    "uploadVoice": "上传语音",
+    "consent": {
+      "coppa": "本人确认是该儿童的父母或法定监护人，并同意提供其相关信息用于视频制作。",
+      "portrait": "本人确认对所上传的照片和音频拥有合法使用权，可用于本次视频制作。"
+    },
+    "submit": "提交订单",
+    "submitFree": "领取免费试用"
+  },
+  "orderFlow": {
+    "pageTitle": "定制视频",
+    "freeBadge": "免费试用",
+    "selectCategory": {
+      "title": "这个视频是为谁制作的？",
+      "subtitle": "选择一个类别开始。"
+    },
+    "selectTemplate": {
+      "title": "选择风格",
+      "subtitle": "选择最适合的视觉风格。",
+      "back": "返回",
+      "duration": {
+        "short": "约1分钟",
+        "medium": "约2分钟"
+      },
+      "occasions": "适用场合",
+      "select": "选择此风格"
+    },
+    "form": {
+      "back": "返回",
+      "sectionSubject": "生日主角信息",
+      "subjectName": "姓名/昵称",
+      "subjectNamePlaceholder": "例：小苏菲",
+      "age": "年龄",
+      "agePlaceholder": "例：5",
+      "birthday": "生日（选填）",
+      "occasion": "庆祝场合",
+      "occasionBirthday": "生日",
+      "occasionAdoption": "领养纪念日",
+      "occasionGraduation": "毕业",
+      "occasionOther": "其他",
+      "blessingMessage": "祝福语",
+      "blessingMessagePlaceholder": "写下你对ta的专属祝福……",
+      "specialNotes": "还有什么要告诉我们的？",
+      "specialNotesPlaceholder": "特殊要求、喜欢的颜色、内部梗……",
+      "sectionMedia": "照片与音频",
+      "uploadPhoto": "上传照片",
+      "uploadPhotoHint": "建议上传——帮助个性化视频",
+      "uploadVoice": "上传语音（选填）",
+      "uploadVoiceHint": "一首喜欢的歌或个人祝福录音",
+      "sectionExtra": "更多详情",
+      "toddler": {
+        "favouriteColour": "最喜欢的颜色",
+        "favouriteColourPlaceholder": "例：蓝色",
+        "favouriteAnimal": "最喜欢的动物",
+        "favouriteAnimalPlaceholder": "例：大象",
+        "bedtimeStory": "加入睡前故事环节？",
+        "storyTheme": "故事主题",
+        "storyThemePlaceholder": "例：海洋冒险、森林朋友……"
+      },
+      "kids": {
+        "styleTag": "视频风格",
+        "heroStyle": "英雄风",
+        "adventureStyle": "冒险风",
+        "funnyStyle": "搞笑风"
+      },
+      "adultFun": {
+        "performanceStyle": "表演风格",
+        "performanceStylePlaceholder": "例：温馨感人、整蛊搞笑、轻松欢乐",
+        "language": "语言",
+        "ageRatingAck": "本人确认此视频面向成人受众。"
+      },
+      "pet": {
+        "petType": "宠物类型",
+        "petTypePlaceholder": "例：狗、猫、兔子",
+        "petName": "宠物名字",
+        "petNamePlaceholder": "例：旺旺",
+        "personality": "性格描述",
+        "personalityPlaceholder": "例：超爱追球、非常粘人、永远在找吃的……",
+        "occasion": "庆祝场合",
+        "occasionBirthday": "生日",
+        "occasionAdoption": "领养纪念日"
+      },
+      "sectionConsent": "授权确认",
+      "coppaConsent": "本人确认是该儿童的父母或法定监护人，并同意提供其相关信息用于视频制作。",
+      "portraitConsent": "本人确认对所上传的照片和音频拥有合法使用权，可用于本次视频制作。",
+      "submit": "领取免费试用",
+      "submitting": "提交中……"
+    },
+    "confirmation": {
+      "title": "订单已提交！",
+      "subtitle": "我们已收到你的订单，专属视频正在制作中。",
+      "orderLabel": "订单",
+      "nextStepsTitle": "接下来会发生什么？",
+      "nextStep1": "我们的团队核对你的信息",
+      "nextStep2": "为你量身打造专属视频",
+      "nextStep3": "发送预览链接供你确认",
+      "backHome": "返回首页",
+      "trackOrder": "查看进度"
+    },
+    "statusPage": {
+      "title": "订单状态",
+      "orderLabel": "订单",
+      "statusLabel": "状态",
+      "updatedLabel": "最后更新"
+    }
+  },
+  "status": {
+    "pending_payment_or_trial": "待确认",
+    "queued": "排队中",
+    "generating": "视频制作中……",
+    "pending_review": "审核中",
+    "pending_user_confirmation": "可预览",
+    "delivered": "已交付",
+    "completed": "已完成",
+    "in_dispute": "售后处理中",
+    "cancelled": "已取消"
+  }
+}
