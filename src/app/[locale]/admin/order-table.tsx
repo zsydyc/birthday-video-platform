@@ -184,12 +184,48 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
                 {expanded === order.id && (
                   <tr key={`${order.id}-expanded`} className="bg-[#FFF8F2]">
                     <td colSpan={6} className="px-6 py-4">
-                      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#2D2235]/40">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#2D2235]/40">
                         {t("formDataLabel")}
                       </p>
+
+                      {/* Asset previews */}
+                      {(() => {
+                        const photoUrl = typeof order.formData.photoUrl === "string" ? order.formData.photoUrl : null;
+                        const voiceUrl = typeof order.formData.voiceUrl === "string" ? order.formData.voiceUrl : null;
+                        if (!photoUrl && !voiceUrl) return null;
+                        return (
+                          <div className="mb-3 flex flex-wrap gap-3">
+                            {photoUrl && (
+                              <a
+                                href={photoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 rounded-lg border border-[#FF6B8A]/30 bg-white px-3 py-1.5 text-xs font-medium text-[#FF6B8A] hover:bg-[#FF6B8A]/5"
+                              >
+                                🖼 {t("viewPhoto")}
+                              </a>
+                            )}
+                            {voiceUrl && (
+                              <a
+                                href={voiceUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 rounded-lg border border-[#60C8FF]/30 bg-white px-3 py-1.5 text-xs font-medium text-[#0077aa] hover:bg-[#60C8FF]/5"
+                              >
+                                🎵 {t("listenAudio")}
+                              </a>
+                            )}
+                          </div>
+                        );
+                      })()}
+
+                      {/* Text fields */}
                       <div className="grid grid-cols-2 gap-x-8 gap-y-1 sm:grid-cols-3">
                         {Object.entries(order.formData)
-                          .filter(([, v]) => v !== "" && v !== null && v !== undefined && v !== false)
+                          .filter(([k, v]) =>
+                            k !== "photoUrl" && k !== "voiceUrl" &&
+                            v !== "" && v !== null && v !== undefined && v !== false
+                          )
                           .map(([k, v]) => (
                             <div key={k} className="flex gap-2 text-xs">
                               <span className="shrink-0 text-[#2D2235]/40">

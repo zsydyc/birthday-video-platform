@@ -208,7 +208,9 @@
       "colActions": "操作",
       "freeBadge": "免费",
       "noMatch": "没有符合筛选条件的订单。",
-      "formDataLabel": "表单内容"
+      "formDataLabel": "表单内容",
+      "viewPhoto": "查看照片",
+      "listenAudio": "收听音频"
     },
     "users": {
       "count": "共 {count} 名用户",

@@ -208,7 +208,9 @@
       "colActions": "Actions",
       "freeBadge": "free",
       "noMatch": "No orders match this filter.",
-      "formDataLabel": "Form Data"
+      "formDataLabel": "Form Data",
+      "viewPhoto": "View Photo",
+      "listenAudio": "Listen to Audio"
     },
     "users": {
       "count": "{count, plural, one {# user} other {# users}} total",

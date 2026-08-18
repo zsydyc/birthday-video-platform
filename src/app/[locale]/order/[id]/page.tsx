@@ -137,6 +137,15 @@ export default function OrderFormPage({
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
+  async function uploadFile(file: File): Promise<string | null> {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch("/api/upload", { method: "POST", body: fd });
+    if (!res.ok) return null;
+    const { url } = await res.json() as { url: string };
+    return url;
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!template) return;
@@ -148,6 +157,12 @@ export default function OrderFormPage({
     localStorage.setItem(DRAFT_KEY, JSON.stringify(serializableForm));
 
     try {
+      // Upload files first, then attach URLs to the order
+      const [photoUrl, voiceUrl] = await Promise.all([
+        form.photoFile ? uploadFile(form.photoFile) : Promise.resolve(null),
+        form.voiceFile ? uploadFile(form.voiceFile) : Promise.resolve(null),
+      ]);
+
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -172,6 +187,9 @@ export default function OrderFormPage({
             petName: form.petName,
             personality: form.personality,
             petOccasion: form.petOccasion,
+            // uploaded asset URLs (null if not provided)
+            photoUrl,
+            voiceUrl,
           },
           coppaConsent: form.coppaConsent,
           portraitConsent: form.portraitConsent,
