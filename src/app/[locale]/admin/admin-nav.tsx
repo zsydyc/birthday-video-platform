@@ -4,12 +4,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-export function AdminNav({ locale }: { locale: string }) {
+export function AdminNav({
+  locale,
+  ordersLabel,
+  usersLabel,
+}: {
+  locale: string;
+  ordersLabel: string;
+  usersLabel: string;
+}) {
   const pathname = usePathname();
 
   const tabs = [
-    { label: "Orders", href: `/${locale}/admin` },
-    { label: "Users", href: `/${locale}/admin/users` },
+    { label: ordersLabel, href: `/${locale}/admin` },
+    { label: usersLabel, href: `/${locale}/admin/users` },
   ];
 
   return (

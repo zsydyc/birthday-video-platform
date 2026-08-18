@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 const ORDER_STATUSES = [
   "pending_payment_or_trial",
@@ -17,15 +18,15 @@ const ORDER_STATUSES = [
 type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 const STATUS_COLORS: Record<OrderStatus, string> = {
-  pending_payment_or_trial: "bg-[#FFCF56]/20 text-[#8a6500]",
-  queued:                   "bg-[#60C8FF]/20 text-[#005f8a]",
-  generating:               "bg-[#FF6B8A]/20 text-[#8a002a]",
-  pending_review:           "bg-purple-100 text-purple-700",
-  pending_user_confirmation:"bg-[#60C8FF]/20 text-[#005f8a]",
-  delivered:                "bg-[#6ECFAF]/20 text-[#1e6e4e]",
-  completed:                "bg-[#6ECFAF]/30 text-[#1e6e4e]",
-  in_dispute:               "bg-red-100 text-red-700",
-  cancelled:                "bg-gray-100 text-gray-500",
+  pending_payment_or_trial:  "bg-[#FFCF56]/20 text-[#8a6500]",
+  queued:                    "bg-[#60C8FF]/20 text-[#005f8a]",
+  generating:                "bg-[#FF6B8A]/20 text-[#8a002a]",
+  pending_review:            "bg-purple-100 text-purple-700",
+  pending_user_confirmation: "bg-[#60C8FF]/20 text-[#005f8a]",
+  delivered:                 "bg-[#6ECFAF]/20 text-[#1e6e4e]",
+  completed:                 "bg-[#6ECFAF]/30 text-[#1e6e4e]",
+  in_dispute:                "bg-red-100 text-red-700",
+  cancelled:                 "bg-gray-100 text-gray-500",
 };
 
 const CATEGORY_EMOJI: Record<string, string> = {
@@ -42,21 +43,25 @@ interface Order {
   template: { name: string; category: string };
 }
 
-function relativeTime(dateStr: string) {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
-}
-
 export function AdminOrderTable({ orders }: { orders: Order[] }) {
+  const t = useTranslations("admin.orders");
+  const ts = useTranslations("status");
+  const tt = useTranslations("admin.time");
+
   const [rows, setRows] = useState(orders);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [updating, setUpdating] = useState<string | null>(null);
+
+  function relativeTime(dateStr: string) {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return tt("justNow");
+    if (mins < 60) return tt("minutesAgo", { count: mins });
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return tt("hoursAgo", { count: hrs });
+    return tt("daysAgo", { count: Math.floor(hrs / 24) });
+  }
 
   const filtered = filterStatus === "all"
     ? rows
@@ -84,8 +89,8 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
     <div className="rounded-2xl bg-white shadow-sm overflow-hidden">
       {/* Filter bar */}
       <div className="flex items-center gap-2 overflow-x-auto border-b border-[#F5EEE6] px-4 py-3">
-        <span className="shrink-0 text-xs font-medium text-[#2D2235]/50">Filter:</span>
-        {["all", ...ORDER_STATUSES].map((s) => (
+        <span className="shrink-0 text-xs font-medium text-[#2D2235]/50">{t("filterLabel")}</span>
+        {(["all", ...ORDER_STATUSES] as const).map((s) => (
           <button
             key={s}
             onClick={() => setFilterStatus(s)}
@@ -95,7 +100,7 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
                 : "bg-[#FFF8F2] text-[#2D2235]/60 hover:bg-[#FF6B8A]/10"
             }`}
           >
-            {s === "all" ? "All" : s.replace(/_/g, " ")}
+            {s === "all" ? t("filterAll") : ts(s as never)}
           </button>
         ))}
       </div>
@@ -105,12 +110,12 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[#F5EEE6] text-left text-xs font-semibold text-[#2D2235]/40 uppercase tracking-wide">
-              <th className="px-4 py-3">Order</th>
-              <th className="px-4 py-3">Customer</th>
-              <th className="px-4 py-3">Template</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Date</th>
-              <th className="px-4 py-3">Actions</th>
+              <th className="px-4 py-3">{t("colOrder")}</th>
+              <th className="px-4 py-3">{t("colCustomer")}</th>
+              <th className="px-4 py-3">{t("colTemplate")}</th>
+              <th className="px-4 py-3">{t("colStatus")}</th>
+              <th className="px-4 py-3">{t("colDate")}</th>
+              <th className="px-4 py-3">{t("colActions")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#F5EEE6]">
@@ -127,7 +132,7 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
                     #{order.id.slice(-8).toUpperCase()}
                     {order.isFreeTrial && (
                       <span className="ml-1.5 rounded-full bg-[#6ECFAF]/20 px-1.5 py-0.5 text-[10px] text-[#1e6e4e]">
-                        free
+                        {t("freeBadge")}
                       </span>
                     )}
                   </td>
@@ -152,7 +157,7 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
                         "bg-gray-100 text-gray-500"
                       }`}
                     >
-                      {order.status.replace(/_/g, " ")}
+                      {ts(order.status as never)}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-[#2D2235]/50">
@@ -169,19 +174,18 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
                     >
                       {ORDER_STATUSES.map((s) => (
                         <option key={s} value={s}>
-                          {s.replace(/_/g, " ")}
+                          {ts(s as never)}
                         </option>
                       ))}
                     </select>
                   </td>
                 </tr>
 
-                {/* Expanded row — form data */}
                 {expanded === order.id && (
                   <tr key={`${order.id}-expanded`} className="bg-[#FFF8F2]">
                     <td colSpan={6} className="px-6 py-4">
                       <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#2D2235]/40">
-                        Form Data
+                        {t("formDataLabel")}
                       </p>
                       <div className="grid grid-cols-2 gap-x-8 gap-y-1 sm:grid-cols-3">
                         {Object.entries(order.formData)
@@ -207,7 +211,7 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
 
         {filtered.length === 0 && (
           <div className="py-16 text-center text-sm text-[#2D2235]/40">
-            No orders match this filter.
+            {t("noMatch")}
           </div>
         )}
       </div>

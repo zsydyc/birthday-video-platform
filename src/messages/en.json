@@ -186,6 +186,51 @@
       "updatedLabel": "Last updated"
     }
   },
+  "admin": {
+    "title": "Admin Dashboard",
+    "subtitle": "Manage your platform",
+    "roleBadge": "Admin",
+    "tabs": {
+      "orders": "Orders",
+      "users": "Users"
+    },
+    "orders": {
+      "count": "{count, plural, one {# order} other {# orders}} total",
+      "empty": "No orders yet",
+      "emptyHint": "Orders will appear here once customers start ordering.",
+      "filterLabel": "Filter:",
+      "filterAll": "All",
+      "colOrder": "Order",
+      "colCustomer": "Customer",
+      "colTemplate": "Template",
+      "colStatus": "Status",
+      "colDate": "Date",
+      "colActions": "Actions",
+      "freeBadge": "free",
+      "noMatch": "No orders match this filter.",
+      "formDataLabel": "Form Data"
+    },
+    "users": {
+      "count": "{count, plural, one {# user} other {# users}} total",
+      "empty": "No users found.",
+      "youLabel": "(you)",
+      "colUser": "User",
+      "colRole": "Role",
+      "colOrders": "Orders",
+      "colJoined": "Joined",
+      "colActions": "Actions",
+      "makeAdmin": "Make Admin",
+      "removeAdmin": "Remove Admin",
+      "saving": "Saving…",
+      "errorUpdate": "Failed to update role"
+    },
+    "time": {
+      "justNow": "just now",
+      "minutesAgo": "{count}m ago",
+      "hoursAgo": "{count}h ago",
+      "daysAgo": "{count}d ago"
+    }
+  },
   "status": {
     "pending_payment_or_trial": "Pending",
     "queued": "Queued",

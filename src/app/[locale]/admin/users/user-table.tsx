@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface User {
   id: string;
@@ -13,18 +14,6 @@ interface User {
   _count: { orders: number };
 }
 
-function relativeTime(dateStr: string) {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  const days = Math.floor(hrs / 24);
-  if (days < 30) return `${days}d ago`;
-  return new Date(dateStr).toLocaleDateString();
-}
-
 export function UserTable({
   users,
   currentUserId,
@@ -32,9 +21,24 @@ export function UserTable({
   users: User[];
   currentUserId: string;
 }) {
+  const t = useTranslations("admin.users");
+  const tt = useTranslations("admin.time");
+
   const [rows, setRows] = useState(users);
   const [updating, setUpdating] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  function relativeTime(dateStr: string) {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return tt("justNow");
+    if (mins < 60) return tt("minutesAgo", { count: mins });
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return tt("hoursAgo", { count: hrs });
+    const days = Math.floor(hrs / 24);
+    if (days < 30) return tt("daysAgo", { count: days });
+    return new Date(dateStr).toLocaleDateString();
+  }
 
   async function toggleRole(userId: string, currentRole: "user" | "admin") {
     const newRole = currentRole === "admin" ? "user" : "admin";
@@ -50,7 +54,7 @@ export function UserTable({
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error ?? "Failed to update role");
+        setError(data.error ?? t("errorUpdate"));
         return;
       }
 
@@ -74,11 +78,11 @@ export function UserTable({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[#F5EEE6] text-left text-xs font-semibold text-[#2D2235]/40 uppercase tracking-wide">
-              <th className="px-4 py-3">User</th>
-              <th className="px-4 py-3">Role</th>
-              <th className="px-4 py-3">Orders</th>
-              <th className="px-4 py-3">Joined</th>
-              <th className="px-4 py-3">Actions</th>
+              <th className="px-4 py-3">{t("colUser")}</th>
+              <th className="px-4 py-3">{t("colRole")}</th>
+              <th className="px-4 py-3">{t("colOrders")}</th>
+              <th className="px-4 py-3">{t("colJoined")}</th>
+              <th className="px-4 py-3">{t("colActions")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#F5EEE6]">
@@ -103,7 +107,9 @@ export function UserTable({
                       <div className="font-medium text-[#2D2235]">
                         {user.name ?? "—"}
                         {user.id === currentUserId && (
-                          <span className="ml-1.5 text-[10px] text-[#2D2235]/40">(you)</span>
+                          <span className="ml-1.5 text-[10px] text-[#2D2235]/40">
+                            {t("youLabel")}
+                          </span>
                         )}
                       </div>
                       <div className="text-xs text-[#2D2235]/40">{user.email}</div>
@@ -142,13 +148,13 @@ export function UserTable({
                         ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
                         : "bg-[#FF6B8A]/10 text-[#FF6B8A] hover:bg-[#FF6B8A]/20"
                     }`}
-                    title={user.id === currentUserId ? "You cannot change your own role" : undefined}
+                    title={user.id === currentUserId ? t("errorUpdate") : undefined}
                   >
                     {updating === user.id
-                      ? "Saving…"
+                      ? t("saving")
                       : user.role === "admin"
-                      ? "Remove Admin"
-                      : "Make Admin"}
+                      ? t("removeAdmin")
+                      : t("makeAdmin")}
                   </button>
                 </td>
               </tr>
@@ -158,13 +164,9 @@ export function UserTable({
 
         {rows.length === 0 && (
           <div className="py-16 text-center text-sm text-[#2D2235]/40">
-            No users found.
+            {t("empty")}
           </div>
         )}
-      </div>
-
-      <div className="border-t border-[#F5EEE6] px-4 py-3 text-xs text-[#2D2235]/40">
-        {rows.length} registered user{rows.length !== 1 ? "s" : ""} total
       </div>
     </div>
   );

@@ -1,8 +1,15 @@
+import { getTranslations } from "next-intl/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { UserTable } from "./user-table";
 
-export default async function AdminUsersPage() {
+export default async function AdminUsersPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "admin.users" });
   const session = await auth();
 
   const users = await prisma.user.findMany({
@@ -21,7 +28,7 @@ export default async function AdminUsersPage() {
   return (
     <div>
       <p className="mb-4 text-sm text-[#2D2235]/50">
-        {users.length} registered user{users.length !== 1 ? "s" : ""} total
+        {t("count", { count: users.length })}
       </p>
       <UserTable
         users={users.map((u) => ({ ...u, createdAt: u.createdAt.toISOString() }))}

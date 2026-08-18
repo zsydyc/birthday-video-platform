@@ -186,6 +186,51 @@
       "updatedLabel": "最后更新"
     }
   },
+  "admin": {
+    "title": "管理后台",
+    "subtitle": "平台管理",
+    "roleBadge": "管理员",
+    "tabs": {
+      "orders": "订单",
+      "users": "用户"
+    },
+    "orders": {
+      "count": "共 {count} 个订单",
+      "empty": "暂无订单",
+      "emptyHint": "有客户下单后，订单将显示在这里。",
+      "filterLabel": "筛选：",
+      "filterAll": "全部",
+      "colOrder": "订单",
+      "colCustomer": "客户",
+      "colTemplate": "模板",
+      "colStatus": "状态",
+      "colDate": "时间",
+      "colActions": "操作",
+      "freeBadge": "免费",
+      "noMatch": "没有符合筛选条件的订单。",
+      "formDataLabel": "表单内容"
+    },
+    "users": {
+      "count": "共 {count} 名用户",
+      "empty": "暂无用户。",
+      "youLabel": "（你）",
+      "colUser": "用户",
+      "colRole": "角色",
+      "colOrders": "订单数",
+      "colJoined": "注册时间",
+      "colActions": "操作",
+      "makeAdmin": "设为管理员",
+      "removeAdmin": "移除管理员",
+      "saving": "保存中…",
+      "errorUpdate": "角色更新失败"
+    },
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{count}分钟前",
+      "hoursAgo": "{count}小时前",
+      "daysAgo": "{count}天前"
+    }
+  },
   "status": {
     "pending_payment_or_trial": "待确认",
     "queued": "排队中",
