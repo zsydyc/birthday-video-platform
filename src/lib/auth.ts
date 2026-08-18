@@ -32,8 +32,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   events: {
-    // Auto-promote the designated admin email on first sign-in
-    async createUser({ user }) {
+    // Promote the admin email to admin role on every sign-in (handles pre-existing accounts)
+    async signIn({ user }) {
       if (user.email === ADMIN_EMAIL) {
         await prisma.user.update({
           where: { id: user.id },

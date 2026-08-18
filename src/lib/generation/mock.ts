@@ -15,29 +15,10 @@ export async function submitGenerationTask(
       orderId,
       inputAssets: [],
       params: params as object,
-      status: "in_progress",
+      status: "pending",
       provider: "mock",
     },
   });
-
-  // Simulate async generation: advance to pending_review after 5 seconds
-  setTimeout(async () => {
-    try {
-      await prisma.generationTask.update({
-        where: { id: task.id },
-        data: {
-          status: "completed",
-          resultUrl: `https://example.com/mock-video/${task.id}.mp4`,
-        },
-      });
-      await prisma.order.update({
-        where: { id: orderId },
-        data: { status: "pending_review" },
-      });
-    } catch {
-      // best-effort in mock — no retry needed
-    }
-  }, 5000);
 
   return task.id;
 }
