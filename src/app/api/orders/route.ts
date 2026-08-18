@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { submitGenerationTask } from "@/lib/generation/mock";
+import { sendAdminOrderNotification, sendUserOrderConfirmation } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -10,12 +11,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const {
-    templateId,
-    formData,
-    coppaConsent,
-    portraitConsent,
-  } = body as {
+  const { templateId, formData, coppaConsent, portraitConsent } = body as {
     templateId: string;
     formData: Record<string, unknown>;
     coppaConsent?: boolean;
@@ -54,6 +50,26 @@ export async function POST(req: NextRequest) {
   await prisma.order.update({
     where: { id: order.id },
     data: { status: "generating" },
+  });
+
+  // Fire-and-forget email notifications
+  const userName = session.user.name ?? "Customer";
+  const userEmail = session.user.email ?? "";
+
+  sendAdminOrderNotification({
+    orderId: order.id,
+    userEmail,
+    userName,
+    templateName: template.name,
+    category: template.category,
+    formData,
+  });
+
+  sendUserOrderConfirmation({
+    orderId: order.id,
+    userEmail,
+    userName,
+    templateName: template.name,
   });
 
   return NextResponse.json({ orderId: order.id }, { status: 201 });

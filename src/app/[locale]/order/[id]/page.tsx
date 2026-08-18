@@ -49,26 +49,37 @@ interface FormState {
   portraitConsent: boolean;
 }
 
+// Production defaults (swap back in before launch — replace the block below)
+// const INITIAL: FormState = {
+//   subjectName: "", age: "", birthday: "", occasion: "birthday",
+//   blessingMessage: "", specialNotes: "", photoFile: null, voiceFile: null,
+//   favouriteColour: "", favouriteAnimal: "", bedtimeStory: false, storyTheme: "",
+//   styleTag: "", performanceStyle: "", language: "", ageRatingAck: false,
+//   petType: "", petName: "", personality: "", petOccasion: "birthday",
+//   coppaConsent: true, portraitConsent: true,
+// };
+
+// TODO: remove before launch — dummy data for testing
 const INITIAL: FormState = {
-  subjectName: "",
-  age: "",
-  birthday: "",
+  subjectName: "Sophie",
+  age: "5",
+  birthday: "2020-03-15",
   occasion: "birthday",
-  blessingMessage: "",
-  specialNotes: "",
+  blessingMessage: "Happy Birthday Sophie! Wishing you a magical day full of joy and laughter. You are so loved! 🎂",
+  specialNotes: "She loves the colour pink and her favourite animal is a unicorn.",
   photoFile: null,
   voiceFile: null,
-  favouriteColour: "",
-  favouriteAnimal: "",
-  bedtimeStory: false,
-  storyTheme: "",
-  styleTag: "",
-  performanceStyle: "",
+  favouriteColour: "Pink",
+  favouriteAnimal: "Unicorn",
+  bedtimeStory: true,
+  storyTheme: "Ocean adventure with friendly dolphins",
+  styleTag: "adventure",
+  performanceStyle: "Heartfelt and fun",
   language: "",
-  ageRatingAck: false,
-  petType: "",
-  petName: "",
-  personality: "",
+  ageRatingAck: true,
+  petType: "Dog",
+  petName: "Buddy",
+  personality: "Super energetic, loves fetch, always hungry, best cuddle buddy.",
   petOccasion: "birthday",
   coppaConsent: true,
   portraitConsent: true,
@@ -90,16 +101,37 @@ export default function OrderFormPage({
   const locale = useLocale();
   const router = useRouter();
 
+  const DRAFT_KEY = `order_draft_${templateId}`;
+
   const [template, setTemplate] = useState<Template | null>(null);
-  const [form, setForm] = useState<FormState>(INITIAL);
+  const [form, setForm] = useState<FormState>(() => {
+    // Restore draft saved before OAuth redirect, if any
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem(`order_draft_${templateId}`);
+        if (saved) return { ...INITIAL, ...JSON.parse(saved) };
+      } catch {
+        // ignore malformed draft
+      }
+    }
+    return INITIAL;
+  });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [draftRestored, setDraftRestored] = useState(false);
 
   useEffect(() => {
     fetch(`/api/templates/${templateId}`)
       .then((r) => r.json())
       .then(setTemplate);
   }, [templateId]);
+
+  // Show "draft restored" notice once if we loaded a saved draft
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = localStorage.getItem(DRAFT_KEY);
+    if (saved) setDraftRestored(true);
+  }, [DRAFT_KEY]);
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -110,6 +142,10 @@ export default function OrderFormPage({
     if (!template) return;
     setSubmitting(true);
     setError(null);
+
+    // Persist non-file fields before the OAuth redirect in case of 401
+    const serializableForm = { ...form, photoFile: null, voiceFile: null };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(serializableForm));
 
     try {
       const res = await fetch("/api/orders", {
@@ -152,6 +188,7 @@ export default function OrderFormPage({
       }
 
       const { orderId } = await res.json();
+      localStorage.removeItem(DRAFT_KEY);
       router.push(`/${locale}/order/${orderId}/status`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -188,6 +225,22 @@ export default function OrderFormPage({
           >
             ← {t("back")}
           </button>
+
+          {draftRestored && (
+            <div className="mb-4 flex items-center justify-between rounded-xl bg-[#6ECFAF]/15 px-4 py-2.5 text-sm text-[#2a7a5e]">
+              <span>✓ Your previously entered information has been restored.</span>
+              <button
+                type="button"
+                onClick={() => {
+                  localStorage.removeItem(DRAFT_KEY);
+                  setDraftRestored(false);
+                }}
+                className="ml-3 text-xs underline opacity-70 hover:opacity-100"
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-[#2D2235]">
               {template.name}
