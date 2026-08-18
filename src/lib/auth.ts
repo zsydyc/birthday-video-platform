@@ -27,19 +27,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async session({ session, user }) {
       session.user.id = user.id;
-      session.user.role = (user as { role?: "user" | "admin" }).role ?? "user";
-      return session;
-    },
-  },
-  events: {
-    // Promote the admin email to admin role on every sign-in (handles pre-existing accounts)
-    async signIn({ user }) {
-      if (user.email === ADMIN_EMAIL) {
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { role: "admin" },
-        });
+      // Always read role fresh from DB — avoids stale adapter cache and handles
+      // pre-existing accounts whose role was set after their session was created.
+      const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { role: true, email: true },
+      });
+      // Auto-promote admin email on the fly if not yet promoted
+      if (dbUser?.email === ADMIN_EMAIL && dbUser.role !== "admin") {
+        await prisma.user.update({ where: { id: user.id }, data: { role: "admin" } });
+        session.user.role = "admin";
+      } else {
+        session.user.role = dbUser?.role ?? "user";
       }
+      return session;
     },
   },
 });
