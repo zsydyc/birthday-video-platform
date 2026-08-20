@@ -131,6 +131,18 @@
       "uploadVoiceHint": "一首喜欢的歌或个人祝福录音",
       "photoFromCamera": "拍照上传",
       "photoFromGallery": "从相册选择",
+      "driveIntro": "请通过 Google Drive 与我们共享您的照片、视频和音频——这样可以上传视频片段，没有文件大小限制。",
+      "driveWhatTitle": "建议上传的内容",
+      "driveItem1": "主角的清晰照片（推荐2–5张）",
+      "driveItem2": "如有短视频片段，也欢迎上传——有助于个性化定制！",
+      "driveItem3": "喜欢的歌曲或语音祝福录音（选填）",
+      "driveStepsTitle": "如何分享",
+      "driveStep1": "打开 Google Drive，新建一个文件夹（例如"小苏菲的生日视频"）",
+      "driveStep2": "将所有照片、视频和音频上传到该文件夹",
+      "driveStep3": "右键点击文件夹 → 共享 → 添加 {email}（选择"查看者"权限即可）",
+      "driveStep4": "点击"复制链接"，粘贴到下方输入框",
+      "driveLinkLabel": "Google Drive 链接（选填）",
+      "driveLinkHint": "您也可以在提交订单后再与我们分享链接。",
       "sectionExtra": "更多详情",
       "toddler": {
         "favouriteColour": "最喜欢的颜色",
@@ -221,7 +233,8 @@
       "noMatch": "没有符合筛选条件的订单。",
       "formDataLabel": "表单内容",
       "viewPhoto": "查看照片",
-      "listenAudio": "收听音频"
+      "listenAudio": "收听音频",
+      "viewDrive": "打开 Google Drive 文件夹"
     },
     "users": {
       "count": "共 {count} 名用户",

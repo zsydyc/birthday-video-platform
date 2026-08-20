@@ -26,8 +26,7 @@ interface FormState {
   occasion: string;
   blessingMessage: string;
   specialNotes: string;
-  photoFiles: File[];
-  voiceFiles: File[];
+  driveLink: string;
   // toddler extras
   favouriteColour: string;
   favouriteAnimal: string;
@@ -51,11 +50,11 @@ interface FormState {
 
 const INITIAL: FormState = {
   subjectName: "", age: "", birthday: "", occasion: "birthday",
-  blessingMessage: "", specialNotes: "", photoFiles: [], voiceFiles: [],
+  blessingMessage: "", specialNotes: "", driveLink: "",
   favouriteColour: "", favouriteAnimal: "", bedtimeStory: false, storyTheme: "",
   styleTag: "", performanceStyle: "", language: "", ageRatingAck: false,
   petType: "", petName: "", personality: "", petOccasion: "birthday",
-  coppaConsent: true, portraitConsent: true,
+  coppaConsent: false, portraitConsent: false,
 };
 
 function needsCoppa(category: Category, age: string) {
@@ -110,36 +109,15 @@ export default function OrderFormPage({
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  async function uploadFile(file: File): Promise<string | null> {
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: fd });
-    if (!res.ok) return null;
-    const { url } = await res.json() as { url: string };
-    return url;
-  }
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!template) return;
     setSubmitting(true);
     setError(null);
 
-    // Persist non-file fields before the OAuth redirect in case of 401
-    const serializableForm = { ...form, photoFiles: [], voiceFiles: [] };
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(serializableForm));
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(form));
 
     try {
-      // Upload all files in parallel, then attach URL arrays to the order
-      const [photoUrls, voiceUrls] = await Promise.all([
-        Promise.all(form.photoFiles.map(uploadFile)).then((urls) =>
-          urls.filter(Boolean) as string[]
-        ),
-        Promise.all(form.voiceFiles.map(uploadFile)).then((urls) =>
-          urls.filter(Boolean) as string[]
-        ),
-      ]);
-
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -152,6 +130,7 @@ export default function OrderFormPage({
             occasion: form.occasion,
             blessingMessage: form.blessingMessage,
             specialNotes: form.specialNotes,
+            driveLink: form.driveLink,
             // category extras
             favouriteColour: form.favouriteColour,
             favouriteAnimal: form.favouriteAnimal,
@@ -164,9 +143,6 @@ export default function OrderFormPage({
             petName: form.petName,
             personality: form.personality,
             petOccasion: form.petOccasion,
-            // uploaded asset URL arrays (empty if nothing provided)
-            photoUrls,
-            voiceUrls,
           },
           coppaConsent: form.coppaConsent,
           portraitConsent: form.portraitConsent,
@@ -201,12 +177,11 @@ export default function OrderFormPage({
   }
 
   const showCoppa = needsCoppa(template.category, form.age);
-  const showPortrait = form.photoFiles.length > 0;
   const canSubmit =
     form.subjectName.trim() &&
     form.blessingMessage.trim() &&
+    form.portraitConsent &&
     (!showCoppa || form.coppaConsent) &&
-    (!showPortrait || form.portraitConsent) &&
     (template.category !== "adult_fun" || form.ageRatingAck);
 
   return (
@@ -334,87 +309,56 @@ export default function OrderFormPage({
             </div>
           </section>
 
-          {/* ── Media upload ──────────────────────────────────────────────── */}
+          {/* ── Media — Google Drive ──────────────────────────────────────── */}
           <section className="rounded-2xl bg-white p-6 shadow-sm space-y-4">
             <h2 className="font-semibold text-[#2D2235]">
               {t("sectionMedia")}
             </h2>
+            <p className="text-sm text-[#2D2235]/60">{t("driveIntro")}</p>
 
-            <div>
-              <Label>{t("uploadPhoto")}</Label>
-              <p className="mb-2 text-xs text-[#2D2235]/50">{t("uploadPhotoHint")}</p>
-              <div className="flex gap-2">
-                <label className="flex-1 cursor-pointer rounded-xl border-2 border-dashed border-[#FF6B8A]/30 bg-[#FF6B8A]/5 px-4 py-3 text-center text-sm text-[#FF6B8A] font-medium hover:bg-[#FF6B8A]/10 transition-colors">
-                  📷 {t("photoFromCamera")}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    multiple
-                    className="hidden"
-                    onChange={(e) =>
-                      set("photoFiles", [...form.photoFiles, ...Array.from(e.target.files ?? [])])
-                    }
-                  />
-                </label>
-                <label className="flex-1 cursor-pointer rounded-xl border-2 border-dashed border-[#FF6B8A]/30 bg-[#FF6B8A]/5 px-4 py-3 text-center text-sm text-[#FF6B8A] font-medium hover:bg-[#FF6B8A]/10 transition-colors">
-                  🖼 {t("photoFromGallery")}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={(e) =>
-                      set("photoFiles", [...form.photoFiles, ...Array.from(e.target.files ?? [])])
-                    }
-                  />
-                </label>
-              </div>
-              {form.photoFiles.length > 0 && (
-                <ul className="mt-2 space-y-0.5">
-                  {form.photoFiles.map((f, i) => (
-                    <li key={i} className="flex items-center justify-between text-xs text-[#2D2235]/60">
-                      <span><span className="text-[#FF6B8A]">🖼</span> {f.name}</span>
-                      <button
-                        type="button"
-                        onClick={() => set("photoFiles", form.photoFiles.filter((_, j) => j !== i))}
-                        className="ml-2 text-[#2D2235]/30 hover:text-red-400"
-                      >✕</button>
-                    </li>
-                  ))}
-                </ul>
-              )}
+            {/* What to include */}
+            <div className="rounded-xl bg-[#FFF8F2] p-4 space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#2D2235]/40">
+                {t("driveWhatTitle")}
+              </p>
+              <ul className="space-y-1.5 text-sm text-[#2D2235]/70">
+                <li>📸 {t("driveItem1")}</li>
+                <li>🎬 {t("driveItem2")}</li>
+                <li>🎵 {t("driveItem3")}</li>
+              </ul>
             </div>
 
+            {/* Steps */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#2D2235]/40">
+                {t("driveStepsTitle")}
+              </p>
+              {([
+                t("driveStep1"),
+                t("driveStep2"),
+                t("driveStep3", { email: "thinkotechnology@gmail.com" }),
+                t("driveStep4"),
+              ] as string[]).map((step, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#FF6B8A] text-xs font-bold text-white">
+                    {i + 1}
+                  </span>
+                  <p className="text-sm text-[#2D2235]/70 pt-0.5">{step}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Link input */}
             <div>
-              <Label>{t("uploadVoice")}</Label>
-              <p className="mb-2 text-xs text-[#2D2235]/50">{t("uploadVoiceHint")}</p>
-              <label className="block cursor-pointer rounded-xl border-2 border-dashed border-[#60C8FF]/30 bg-[#60C8FF]/5 px-4 py-3 text-center text-sm text-[#0077aa] font-medium hover:bg-[#60C8FF]/10 transition-colors">
-                🎵 {t("uploadVoice")}
-                <input
-                  type="file"
-                  accept="audio/*"
-                  multiple
-                  className="hidden"
-                  onChange={(e) =>
-                    set("voiceFiles", [...form.voiceFiles, ...Array.from(e.target.files ?? [])])
-                  }
-                />
-              </label>
-              {form.voiceFiles.length > 0 && (
-                <ul className="mt-2 space-y-0.5">
-                  {form.voiceFiles.map((f, i) => (
-                    <li key={i} className="flex items-center justify-between text-xs text-[#2D2235]/60">
-                      <span><span className="text-[#60C8FF]">🎵</span> {f.name}</span>
-                      <button
-                        type="button"
-                        onClick={() => set("voiceFiles", form.voiceFiles.filter((_, j) => j !== i))}
-                        className="ml-2 text-[#2D2235]/30 hover:text-red-400"
-                      >✕</button>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <Label htmlFor="driveLink">{t("driveLinkLabel")}</Label>
+              <Input
+                id="driveLink"
+                type="url"
+                value={form.driveLink}
+                onChange={(e) => set("driveLink", e.target.value)}
+                placeholder="https://drive.google.com/drive/folders/..."
+              />
+              <p className="mt-1 text-xs text-[#2D2235]/40">{t("driveLinkHint")}</p>
             </div>
           </section>
 

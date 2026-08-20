@@ -131,6 +131,18 @@
       "uploadVoiceHint": "A favourite song or personal greeting",
       "photoFromCamera": "Take a Photo",
       "photoFromGallery": "Choose from Gallery",
+      "driveIntro": "Share your photos, videos, and audio with us via Google Drive — this lets you include clips and videos without any file size limits.",
+      "driveWhatTitle": "What to include",
+      "driveItem1": "Clear photos of the birthday star (2–5 photos recommended)",
+      "driveItem2": "Short video clips if you have them — great for personalisation!",
+      "driveItem3": "A favourite song or voice recording (optional)",
+      "driveStepsTitle": "How to share",
+      "driveStep1": "Go to Google Drive and create a new folder (e.g. \"Sophie's Birthday Video\")",
+      "driveStep2": "Upload all your photos, videos, and audio into that folder",
+      "driveStep3": "Right-click the folder → Share → share with {email} (Viewer access is fine)",
+      "driveStep4": "Click \"Copy link\" and paste it in the field below",
+      "driveLinkLabel": "Google Drive link (optional)",
+      "driveLinkHint": "You can also share the link with us after submitting your order.",
       "sectionExtra": "A Few More Details",
       "toddler": {
         "favouriteColour": "Favourite Colour",
@@ -221,7 +233,8 @@
       "noMatch": "No orders match this filter.",
       "formDataLabel": "Form Data",
       "viewPhoto": "View Photo",
-      "listenAudio": "Listen to Audio"
+      "listenAudio": "Listen to Audio",
+      "viewDrive": "Open Google Drive folder"
     },
     "users": {
       "count": "{count, plural, one {# user} other {# users}} total",

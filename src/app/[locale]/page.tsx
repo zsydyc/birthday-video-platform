@@ -192,9 +192,9 @@ export default async function HomePage({
             <span className="hidden sm:inline">— {t("footer.tagline")}</span>
           </div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-[#FF6B8A] transition-colors">{t("footer.privacy")}</a>
-            <a href="#" className="hover:text-[#FF6B8A] transition-colors">{t("footer.terms")}</a>
-            <a href="#" className="hover:text-[#FF6B8A] transition-colors">{t("footer.contact")}</a>
+            <Link href={`/${locale}/privacy`} className="hover:text-[#FF6B8A] transition-colors">{t("footer.privacy")}</Link>
+            <Link href={`/${locale}/terms`} className="hover:text-[#FF6B8A] transition-colors">{t("footer.terms")}</Link>
+            <a href="mailto:thinkotechnology@gmail.com" className="hover:text-[#FF6B8A] transition-colors">{t("footer.contact")}</a>
           </div>
         </div>
       </footer>

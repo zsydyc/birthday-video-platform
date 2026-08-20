@@ -188,52 +188,25 @@ export function AdminOrderTable({ orders }: { orders: Order[] }) {
                         {t("formDataLabel")}
                       </p>
 
-                      {/* Asset previews */}
-                      {(() => {
-                        const photoUrls = Array.isArray(order.formData.photoUrls)
-                          ? (order.formData.photoUrls as string[])
-                          : typeof order.formData.photoUrl === "string"
-                          ? [order.formData.photoUrl]
-                          : [];
-                        const voiceUrls = Array.isArray(order.formData.voiceUrls)
-                          ? (order.formData.voiceUrls as string[])
-                          : typeof order.formData.voiceUrl === "string"
-                          ? [order.formData.voiceUrl]
-                          : [];
-                        if (!photoUrls.length && !voiceUrls.length) return null;
-                        return (
-                          <div className="mb-3 flex flex-wrap gap-2">
-                            {photoUrls.map((url, i) => (
-                              <a
-                                key={url}
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 rounded-lg border border-[#FF6B8A]/30 bg-white px-3 py-1.5 text-xs font-medium text-[#FF6B8A] hover:bg-[#FF6B8A]/5"
-                              >
-                                🖼 {t("viewPhoto")}{photoUrls.length > 1 ? ` ${i + 1}` : ""}
-                              </a>
-                            ))}
-                            {voiceUrls.map((url, i) => (
-                              <a
-                                key={url}
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 rounded-lg border border-[#60C8FF]/30 bg-white px-3 py-1.5 text-xs font-medium text-[#0077aa] hover:bg-[#60C8FF]/5"
-                              >
-                                🎵 {t("listenAudio")}{voiceUrls.length > 1 ? ` ${i + 1}` : ""}
-                              </a>
-                            ))}
-                          </div>
-                        );
-                      })()}
+                      {/* Google Drive link */}
+                      {typeof order.formData.driveLink === "string" && order.formData.driveLink && (
+                        <div className="mb-3">
+                          <a
+                            href={order.formData.driveLink as string}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-[#60C8FF]/30 bg-white px-3 py-1.5 text-xs font-medium text-[#0077aa] hover:bg-[#60C8FF]/5"
+                          >
+                            📁 {t("viewDrive")}
+                          </a>
+                        </div>
+                      )}
 
                       {/* Text fields */}
                       <div className="grid grid-cols-2 gap-x-8 gap-y-1 sm:grid-cols-3">
                         {Object.entries(order.formData)
                           .filter(([k, v]) =>
-                            !["photoUrl", "voiceUrl", "photoUrls", "voiceUrls"].includes(k) &&
+                            !["driveLink", "photoUrl", "voiceUrl", "photoUrls", "voiceUrls"].includes(k) &&
                             v !== "" && v !== null && v !== undefined && v !== false &&
                             !(Array.isArray(v) && v.length === 0)
                           )
