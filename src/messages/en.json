@@ -127,8 +127,10 @@
       "sectionMedia": "Photos & Audio",
       "uploadPhoto": "Upload a Photo",
       "uploadPhotoHint": "Recommended — helps personalise the video",
-      "uploadVoice": "Upload a Voice Clip (optional)",
+      "uploadVoice": "Upload Audio",
       "uploadVoiceHint": "A favourite song or personal greeting",
+      "photoFromCamera": "Take a Photo",
+      "photoFromGallery": "Choose from Gallery",
       "sectionExtra": "A Few More Details",
       "toddler": {
         "favouriteColour": "Favourite Colour",
@@ -185,6 +187,15 @@
       "statusLabel": "Status",
       "updatedLabel": "Last updated"
     }
+  },
+  "myOrders": {
+    "title": "My Orders",
+    "count": "{count, plural, one {# order} other {# orders}}",
+    "empty": "No orders yet",
+    "emptyHint": "Create your first personalised video!",
+    "createCta": "Create a Video",
+    "forSubject": "For {name}",
+    "freeBadge": "Free"
   },
   "admin": {
     "title": "Admin Dashboard",

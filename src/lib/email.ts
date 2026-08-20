@@ -38,7 +38,7 @@ export async function sendAdminOrderNotification(params: OrderNotificationParams
         <tr><td style="padding:8px;color:#888">Message</td><td style="padding:8px">${formData.blessingMessage ?? "—"}</td></tr>
       </table>
       <p style="margin-top:24px">
-        <a href="https://birthday-video-platform.vercel.app/en/admin" style="background:#FF6B8A;color:white;padding:10px 20px;border-radius:999px;text-decoration:none;font-weight:600">
+        <a href="${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/en/admin" style="background:#FF6B8A;color:white;padding:10px 20px;border-radius:999px;text-decoration:none;font-weight:600">
           View in Admin Dashboard →
         </a>
       </p>

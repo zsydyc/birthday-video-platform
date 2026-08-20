@@ -22,9 +22,10 @@ Live project conventions: `CLAUDE.md`
 |---|---|---|
 | **0 — Foundation** | Next.js scaffold, design tokens, i18n, Prisma schema, design system, landing page, auth wiring | ✅ Complete |
 | **1 — Auth + Landing** | Landing page live, Navbar with locale toggle, NextAuth Google + Apple providers configured | ✅ Complete (in Phase 0) |
-| **2 — Order Questionnaire** | Category selection, template library, dynamic form, file upload, COPPA gate, free-trial submit | 🔲 Not started — **start here** |
+| **1.5 — Auth UX + Navbar Polish** | Auth-aware navbar, sign-in/sign-out, My Orders gate, form draft persistence | ✅ Complete (draft persistence done; navbar auth-awareness in progress) |
+| **2 — Order Questionnaire** | Category selection, template library, dynamic form, file upload, COPPA gate, free-trial submit | ✅ Complete |
 | **3 — Order State Machine** | Status flow, generation task mock, My Orders page, SubjectProfile reuse | 🔲 Not started |
-| **4 — Admin Dashboard** | Order list + status management, template CRUD | 🔲 Not started |
+| **4 — Admin Dashboard** | Order list + status management, order email notifications, template CRUD | 🔲 In progress |
 | **5 — Delivery Flow** | Video preview, confirm / request-revision, ReviewRecord stubs | 🔲 Not started |
 | **6 — Stripe Scaffold + Polish** | Stripe checkout (optional path), loading/error states, mobile pass | 🔲 Not started |
 
@@ -210,6 +211,85 @@ The order flow is the product's core. Design it as a **questionnaire** (not a mu
 - No copyrighted character names in seed data, copy, or form labels — use style tags only
 - Responsive: mobile-first, then iPad, then desktop
 - All UI strings go in `src/messages/en.json` AND `src/messages/zh.json` before building the component
+
+---
+
+---
+
+## What to Build Next — Phase 1.5: Auth UX + Navbar Polish
+
+**UX standard:** navbar must be fully auth-aware. No dead buttons.
+
+### Tasks
+
+**1.5a. Auth-aware Navbar**
+- Sign In button → calls NextAuth `signIn("google")` and redirects back to current page
+- When signed in: replace Sign In with user avatar + display name + Sign Out dropdown
+- "My Orders" → only visible when signed in; clicking navigates to `/[locale]/orders`
+- When not signed in: "My Orders" hidden (or replaced by "Sign In to see your orders")
+- Mobile: hamburger menu with same auth logic
+- Wrap layout in `SessionProvider` so `useSession()` works in client components
+
+**1.5b. Protected "My Orders" page** — Phase 3 will build the full page; for now, a stub that at least doesn't 404
+
+---
+
+## What to Build Next — Phase 4: Admin Dashboard + Notifications
+
+**Admin email:** `zsyoscar@gmail.com` (update in `.env` as `ADMIN_EMAIL` before launch)
+**Email provider:** Resend (resend.com — free tier, simple API). Requires `RESEND_API_KEY` in `.env`.
+
+### Tasks
+
+**4a. Admin email notification on new order**
+- Trigger: `POST /api/orders` success
+- Email to `ADMIN_EMAIL` with: order ID, user name/email, template name, category, key form fields (subject name, occasion, blessing message)
+- Implementation: `src/lib/email.ts` → `sendAdminOrderNotification(order)`
+- Scaffold with Resend SDK; graceful no-op if `RESEND_API_KEY` is not set (so dev still works)
+
+**4b. User confirmation email on new order**
+- Same trigger, email to the ordering user
+- Content: order ID, what happens next (3-step summary), estimated timeline
+- Use same `src/lib/email.ts`
+
+**4c. Admin Dashboard — `/[locale]/admin`**
+- Protected: only accessible if `session.user.email === process.env.ADMIN_EMAIL`
+- Order list table: columns — Order ID, User, Template, Category, Status badge, Date, Actions
+- Status can be updated inline (dropdown → PATCH `/api/admin/orders/[id]`)
+- Filter by status
+- Click row → expand to see full `formData` snapshot
+- Route: `/[locale]/admin/orders`
+
+**4d. Admin API routes**
+- `GET /api/admin/orders` — list all orders (admin only)
+- `PATCH /api/admin/orders/[id]` — update order status (admin only)
+
+### UX standards for admin
+- Clean data table, not a card grid
+- Status badges with color coding (match order status palette)
+- Timestamp shown as relative time ("2 hours ago") + absolute on hover
+- Empty state if no orders yet
+- Pagination if > 20 orders
+
+---
+
+## High-Standard UX Checklist (apply to every page)
+
+These are non-negotiable for a production-quality platform:
+
+| Area | Requirement |
+|---|---|
+| **Auth** | Navbar always auth-aware — no dead buttons ever |
+| **Loading states** | Every async action shows a spinner or skeleton |
+| **Error states** | Every form/page has a visible error message on failure |
+| **Empty states** | Lists show an illustration + CTA when empty (not a blank page) |
+| **Mobile** | All pages usable on 375px width without horizontal scroll |
+| **Redirects** | Unauthenticated access to protected pages → sign-in with callbackUrl |
+| **Feedback** | Every user action (submit, save, delete) gives visible confirmation |
+| **i18n** | Every UI string in both en.json AND zh.json before building |
+| **Forms** | Validation errors shown inline, not just alert() |
+| **Emails** | Admin notified of every new order; user gets confirmation |
+| **Security** | Admin routes check session server-side, not just client-side |
 
 ---
 

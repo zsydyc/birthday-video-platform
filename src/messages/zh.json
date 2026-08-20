@@ -127,8 +127,10 @@
       "sectionMedia": "照片与音频",
       "uploadPhoto": "上传照片",
       "uploadPhotoHint": "建议上传——帮助个性化视频",
-      "uploadVoice": "上传语音（选填）",
+      "uploadVoice": "上传音频",
       "uploadVoiceHint": "一首喜欢的歌或个人祝福录音",
+      "photoFromCamera": "拍照上传",
+      "photoFromGallery": "从相册选择",
       "sectionExtra": "更多详情",
       "toddler": {
         "favouriteColour": "最喜欢的颜色",
@@ -185,6 +187,15 @@
       "statusLabel": "状态",
       "updatedLabel": "最后更新"
     }
+  },
+  "myOrders": {
+    "title": "我的订单",
+    "count": "共 {count} 个订单",
+    "empty": "暂无订单",
+    "emptyHint": "来制作你的第一段专属视频吧！",
+    "createCta": "立即制作",
+    "forSubject": "为 {name} 制作",
+    "freeBadge": "免费"
   },
   "admin": {
     "title": "管理后台",

@@ -28,8 +28,8 @@ export default async function MyOrdersPage() {
     redirect(`/api/auth/signin?callbackUrl=/${locale}/orders`);
   }
 
-  const t = await getTranslations("status");
-  const tn = await getTranslations("nav");
+  const t = await getTranslations("myOrders");
+  const ts = await getTranslations("status");
 
   const orders = await prisma.order.findMany({
     where: { userId: session.user.id },
@@ -43,24 +43,22 @@ export default async function MyOrdersPage() {
     <main className="min-h-screen bg-[#FFF8F2] px-4 py-12">
       <div className="mx-auto max-w-2xl">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-[#2D2235]">{tn("myOrders")}</h1>
+          <h1 className="text-2xl font-bold text-[#2D2235]">{t("title")}</h1>
           <p className="mt-1 text-sm text-[#2D2235]/50">
-            {orders.length} order{orders.length !== 1 ? "s" : ""}
+            {t("count", { count: orders.length })}
           </p>
         </div>
 
         {orders.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl bg-white py-24 shadow-sm text-center">
             <span className="mb-4 text-5xl">🎂</span>
-            <p className="text-lg font-semibold text-[#2D2235]">No orders yet</p>
-            <p className="mt-1 mb-6 text-sm text-[#2D2235]/50">
-              Create your first personalised video!
-            </p>
+            <p className="text-lg font-semibold text-[#2D2235]">{t("empty")}</p>
+            <p className="mt-1 mb-6 text-sm text-[#2D2235]/50">{t("emptyHint")}</p>
             <Link
               href={`/${locale}/order`}
               className="rounded-full bg-[#FF6B8A] px-6 py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
             >
-              Create a Video
+              {t("createCta")}
             </Link>
           </div>
         ) : (
@@ -73,12 +71,10 @@ export default async function MyOrdersPage() {
                   href={`/${locale}/order/${order.id}/status`}
                   className="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5"
                 >
-                  {/* Category icon */}
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FFF8F2] text-2xl">
                     {CATEGORY_EMOJI[order.template.category] ?? "🎂"}
                   </div>
 
-                  {/* Order info */}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <p className="font-semibold text-[#2D2235] truncate">
@@ -86,34 +82,28 @@ export default async function MyOrdersPage() {
                       </p>
                       {order.isFreeTrial && (
                         <span className="shrink-0 rounded-full bg-[#6ECFAF]/20 px-2 py-0.5 text-[10px] font-semibold text-[#2a7a5e]">
-                          Free
+                          {t("freeBadge")}
                         </span>
                       )}
                     </div>
                     <p className="mt-0.5 text-xs text-[#2D2235]/50">
                       {formData.subjectName
-                        ? `For ${formData.subjectName}`
+                        ? t("forSubject", { name: String(formData.subjectName) })
                         : `#${order.id.slice(-8).toUpperCase()}`}
                       {" · "}
                       {new Date(order.createdAt).toLocaleDateString()}
                     </p>
                   </div>
 
-                  {/* Status badge */}
                   <span
                     className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
                       STATUS_COLOR[order.status] ?? "bg-gray-100 text-gray-500"
                     }`}
                   >
-                    {t(order.status as never)}
+                    {ts(order.status as never)}
                   </span>
 
-                  <svg
-                    className="h-4 w-4 shrink-0 text-[#2D2235]/30"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="h-4 w-4 shrink-0 text-[#2D2235]/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>

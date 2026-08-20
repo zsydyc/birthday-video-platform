@@ -49,40 +49,13 @@ interface FormState {
   portraitConsent: boolean;
 }
 
-// Production defaults (swap back in before launch — replace the block below)
-// const INITIAL: FormState = {
-//   subjectName: "", age: "", birthday: "", occasion: "birthday",
-//   blessingMessage: "", specialNotes: "", photoFiles: [], voiceFiles: [],
-//   favouriteColour: "", favouriteAnimal: "", bedtimeStory: false, storyTheme: "",
-//   styleTag: "", performanceStyle: "", language: "", ageRatingAck: false,
-//   petType: "", petName: "", personality: "", petOccasion: "birthday",
-//   coppaConsent: true, portraitConsent: true,
-// };
-
-// TODO: remove before launch — dummy data for testing
 const INITIAL: FormState = {
-  subjectName: "Sophie",
-  age: "5",
-  birthday: "2020-03-15",
-  occasion: "birthday",
-  blessingMessage: "Happy Birthday Sophie! Wishing you a magical day full of joy and laughter. You are so loved! 🎂",
-  specialNotes: "She loves the colour pink and her favourite animal is a unicorn.",
-  photoFiles: [],
-  voiceFiles: [],
-  favouriteColour: "Pink",
-  favouriteAnimal: "Unicorn",
-  bedtimeStory: true,
-  storyTheme: "Ocean adventure with friendly dolphins",
-  styleTag: "adventure",
-  performanceStyle: "Heartfelt and fun",
-  language: "",
-  ageRatingAck: true,
-  petType: "Dog",
-  petName: "Buddy",
-  personality: "Super energetic, loves fetch, always hungry, best cuddle buddy.",
-  petOccasion: "birthday",
-  coppaConsent: true,
-  portraitConsent: true,
+  subjectName: "", age: "", birthday: "", occasion: "birthday",
+  blessingMessage: "", specialNotes: "", photoFiles: [], voiceFiles: [],
+  favouriteColour: "", favouriteAnimal: "", bedtimeStory: false, storyTheme: "",
+  styleTag: "", performanceStyle: "", language: "", ageRatingAck: false,
+  petType: "", petName: "", personality: "", petOccasion: "birthday",
+  coppaConsent: true, portraitConsent: true,
 };
 
 function needsCoppa(category: Category, age: string) {
@@ -369,21 +342,44 @@ export default function OrderFormPage({
 
             <div>
               <Label>{t("uploadPhoto")}</Label>
-              <p className="mb-1 text-xs text-[#2D2235]/50">{t("uploadPhotoHint")}</p>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                className="w-full text-sm text-[#2D2235]/70 file:mr-3 file:rounded-full file:border-0 file:bg-[#FF6B8A]/10 file:px-4 file:py-1.5 file:text-sm file:text-[#FF6B8A] file:font-medium hover:file:bg-[#FF6B8A]/20"
-                onChange={(e) =>
-                  set("photoFiles", Array.from(e.target.files ?? []))
-                }
-              />
+              <p className="mb-2 text-xs text-[#2D2235]/50">{t("uploadPhotoHint")}</p>
+              <div className="flex gap-2">
+                <label className="flex-1 cursor-pointer rounded-xl border-2 border-dashed border-[#FF6B8A]/30 bg-[#FF6B8A]/5 px-4 py-3 text-center text-sm text-[#FF6B8A] font-medium hover:bg-[#FF6B8A]/10 transition-colors">
+                  📷 {t("photoFromCamera")}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    multiple
+                    className="hidden"
+                    onChange={(e) =>
+                      set("photoFiles", [...form.photoFiles, ...Array.from(e.target.files ?? [])])
+                    }
+                  />
+                </label>
+                <label className="flex-1 cursor-pointer rounded-xl border-2 border-dashed border-[#FF6B8A]/30 bg-[#FF6B8A]/5 px-4 py-3 text-center text-sm text-[#FF6B8A] font-medium hover:bg-[#FF6B8A]/10 transition-colors">
+                  🖼 {t("photoFromGallery")}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={(e) =>
+                      set("photoFiles", [...form.photoFiles, ...Array.from(e.target.files ?? [])])
+                    }
+                  />
+                </label>
+              </div>
               {form.photoFiles.length > 0 && (
-                <ul className="mt-1.5 space-y-0.5">
+                <ul className="mt-2 space-y-0.5">
                   {form.photoFiles.map((f, i) => (
-                    <li key={i} className="flex items-center gap-1.5 text-xs text-[#2D2235]/60">
-                      <span className="text-[#FF6B8A]">🖼</span> {f.name}
+                    <li key={i} className="flex items-center justify-between text-xs text-[#2D2235]/60">
+                      <span><span className="text-[#FF6B8A]">🖼</span> {f.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => set("photoFiles", form.photoFiles.filter((_, j) => j !== i))}
+                        className="ml-2 text-[#2D2235]/30 hover:text-red-400"
+                      >✕</button>
                     </li>
                   ))}
                 </ul>
@@ -392,21 +388,29 @@ export default function OrderFormPage({
 
             <div>
               <Label>{t("uploadVoice")}</Label>
-              <p className="mb-1 text-xs text-[#2D2235]/50">{t("uploadVoiceHint")}</p>
-              <input
-                type="file"
-                accept="audio/*"
-                multiple
-                className="w-full text-sm text-[#2D2235]/70 file:mr-3 file:rounded-full file:border-0 file:bg-[#60C8FF]/10 file:px-4 file:py-1.5 file:text-sm file:text-[#60C8FF] file:font-medium hover:file:bg-[#60C8FF]/20"
-                onChange={(e) =>
-                  set("voiceFiles", Array.from(e.target.files ?? []))
-                }
-              />
+              <p className="mb-2 text-xs text-[#2D2235]/50">{t("uploadVoiceHint")}</p>
+              <label className="block cursor-pointer rounded-xl border-2 border-dashed border-[#60C8FF]/30 bg-[#60C8FF]/5 px-4 py-3 text-center text-sm text-[#0077aa] font-medium hover:bg-[#60C8FF]/10 transition-colors">
+                🎵 {t("uploadVoice")}
+                <input
+                  type="file"
+                  accept="audio/*"
+                  multiple
+                  className="hidden"
+                  onChange={(e) =>
+                    set("voiceFiles", [...form.voiceFiles, ...Array.from(e.target.files ?? [])])
+                  }
+                />
+              </label>
               {form.voiceFiles.length > 0 && (
-                <ul className="mt-1.5 space-y-0.5">
+                <ul className="mt-2 space-y-0.5">
                   {form.voiceFiles.map((f, i) => (
-                    <li key={i} className="flex items-center gap-1.5 text-xs text-[#2D2235]/60">
-                      <span className="text-[#60C8FF]">🎵</span> {f.name}
+                    <li key={i} className="flex items-center justify-between text-xs text-[#2D2235]/60">
+                      <span><span className="text-[#60C8FF]">🎵</span> {f.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => set("voiceFiles", form.voiceFiles.filter((_, j) => j !== i))}
+                        className="ml-2 text-[#2D2235]/30 hover:text-red-400"
+                      >✕</button>
                     </li>
                   ))}
                 </ul>
